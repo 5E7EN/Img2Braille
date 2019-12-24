@@ -4,6 +4,12 @@
 # Img2Brialle - Dank Edition
 JavaScript utility to generate braille (unicode) text from an image.
 
+# Installation
+You may download this package with npm using:
+```
+npm install img2braille
+```
+
 # Usage
 
 `toBraille()` accepts 3 parameters - the image, ASCII width, and a color object that contains RGB threshold levels.
