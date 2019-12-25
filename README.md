@@ -46,6 +46,14 @@ img.src = 'path/to/image.png';
 */
 ```
 <br>
+
+# TODO:
+
+* Promisify callback functions
+* Add dithering support
+* Inversion (dark mode) support
+* Customizable RGB coloring
+<br>
 <br>
 <br>
 <i>Originally masterminded by the creator of https://505e06b2.github.io/Image-to-Braille, this utility has been refactored and converted into a node.js package.</i>
