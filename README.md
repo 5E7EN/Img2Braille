@@ -52,7 +52,6 @@ img.src = 'path/to/image.png';
 * Promisify callback functions
 * Add dithering support
 * Inversion (dark mode) support
-* Customizable RGB coloring
 <br>
 <br>
 <br>
