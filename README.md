@@ -1,58 +1,111 @@
 ![npm](https://img.shields.io/npm/v/img2braille?style=for-the-badge)
 ![NPM](https://img.shields.io/npm/l/img2braille?style=for-the-badge)
 
-# Img2Brialle - Dank Edition
+# Img2Braille - Dank Edition
+
 JavaScript utility to generate braille (unicode) text from an image.
 
-# Installation
-You may download this package with npm using:
+## Installation
+
+You may install this package with npm using:
+
 ```
 npm install img2braille
 ```
 
-# Usage
+## Usage
 
-`toBraille()` accepts 3 parameters - the image, ASCII width, and a color object that contains RGB threshold levels.
-<br>
-You may create an Image object using `new Image();`
-<br>
-<br>
-Example:
+After importing the package into your project, a `braillefy` method will be accessible to you. This function accepts 3 arguments, as described below:
+
+-   `imageURL` (string) - The source URL of the target image. This can be represented as either a local or remote path.
+-   `asciiWidth` (integer) - The desired width of the generated ASCII.
+-   `options` - An object with following (all optional):
+    -   `dither` (boolean) - If truthy, a dithering effect will be applied to the output which will produce an overall cleaner/smoother result. Default: true.
+    -   `invert` (boolean) - If truthy, the background colors will be inverted (light -> dark). This is especially useful in cases where you'd like to match a certain background color scheme. Default: false.
+    -   `lineSeperator` (string) - Character of which to succeed each end-of-line. Default: `\n` (newline).
+    -   `colors` - An object representing RGB threshold levels to be applied during generation. Minimum: 0.01 - Maximum: 10. Default: `{ red: 1, green: 1, blue: 1 }`.
+
+## Examples
+
 ```
-const { Image, toBraille } = require('img2braille');
+const { braillefy } = require('img2braille');
 
-let img = new Image();
-img.onload = () => {
-  console.log(toBraille(img, 30, { red: 1, green: 1, blue: 1 }));
-};
-img.src = 'path/to/image.png';
+(async () => {
+    const asciiOpts = {
+        dither: false,
+        invert: false,
+    };
 
-/* Sample Output -
-⣿⣿⣿⣿⣿⣿⣿⣿⠿⠛⠋⣉⣁⣀⣤⣤⣀⣈⣉⠙⠛⠿⣿⣿⣿⣿⣿⣿⣿⣿
-⣿⣿⣿⣿⣿⠟⠋⣀⣤⣶⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣶⣤⣀⠙⠻⣿⣿⣿⣿⣿
-⣿⣿⣿⠟⠁⣠⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⣄⠈⠻⣿⣿⣿
-⣿⣿⠋⢠⣾⣿⣿⣿⠿⠿⢿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠿⠿⣿⣿⣿⣷⡄⠙⣿⣿
-⣿⠃⢠⣿⣿⣿⡟⢁⣤⣤⣄⠈⢿⣿⣿⣿⣿⡿⠁⣠⣤⣤⡈⢻⣿⣿⣿⡄⠘⣿
-⡏⢠⣿⣿⣿⣿⣧⣼⣿⣿⣿⣦⣼⣿⣿⣿⣿⣧⣴⣿⣿⣿⣧⣼⣿⣿⣿⣿⡄⢹
-⠁⢸⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡇⠈
-⠄⣿⣿⡟⠉⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠉⢻⣿⣿⠄
-⡀⢸⣿⣿⠄⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠄⣿⣿⡇⢀
-⣇⠘⣿⣿⣇⠘⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠃⣸⣿⣿⠃⣸
-⣿⡄⠘⣿⣿⣆⠈⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠁⣰⣿⣿⠃⢠⣿
-⣿⣿⣄⠘⢿⣿⣷⣄⠙⠻⢿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠟⠋⣠⣾⣿⡿⠃⣠⣿⣿
-⣿⣿⣿⣦⡀⠙⢿⣿⣷⣦⣄⣉⠙⠛⠛⠛⠛⠋⣉⣠⣴⣾⣿⡿⠋⢀⣴⣿⣿⣿
-⣿⣿⣿⣿⣿⣦⣄⠉⠛⠿⣿⣿⣿⣿⣶⣶⣿⣿⣿⣿⠿⠛⠉⣠⣴⣿⣿⣿⣿⣿
-⣿⣿⣿⣿⣿⣿⣿⣿⣶⣤⣄⣉⡉⠉⠛⠛⠉⢉⣉⣠⣤⣶⣿⣿⣿⣿⣿⣿⣿⣿
-*/
+    const result = await braillefy('https://i.nuuls.com/LAOzc.png', 30, asciiOpts);
+
+    console.log(result);
+
+    /*
+    ⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣯⣿⣿⣿⣿⣷⡿⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿
+    ⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣫⣵⣿⣿⣿⣿⣿⣿⣿⣷⡻⣿⣿⣿⣿⣿⣿⣿⣿⣿
+    ⣿⣿⣿⣿⣿⣿⣿⣿⡿⣻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⡿⣿⣿⣿⣿⣿⣿⣿⣿
+    ⣿⣿⣿⣿⣿⣿⣿⣿⣽⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣟⣿⣿⣿⣿⣿⣿⣿
+    ⣿⣿⣿⣿⣿⣿⣿⣳⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿
+    ⣿⣿⣿⣿⣿⣿⣷⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣯⢿⣿⣿⣿⣿
+    ⣿⣿⣿⣿⣿⣟⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣟⣿⣿⣿⣿
+    ⣿⣿⣿⣿⣿⠍⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠄⠄⠄⠄⠄⠄⠙⢿⣿
+    ⣿⣿⡿⠉⠄⠄⠄⠄⢤⣶⣾⣿⣿⠿⠷⠲⢶⣦⡄⠄⠄⠄⢀⣀⣀⣤⣤⣤⣤⣹
+    ⣿⡿⠁⠄⠄⠄⠄⠄⠄⠉⠛⠻⠇⠈⠁⠄⠄⡿⣿⣿⣿⣿⣿⣿⠋⠄⠄⡀⢿⢿
+    ⣿⡇⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠈⠉⠛⠛⠃⠄⠄⠄⠄⣴⣾
+    ⣿⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠠⠄⠄⠄⣀⣹⣿
+    ⣿⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⢀⣴⣶⣿⣿⣿⣿
+    ⣿⣆⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⢀⣴⣿⣿⣿⣿⣿⣿⣿
+    ⣿⣿⣶⣤⣀⡀⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⢀⣀⣴⣿⣿⣿⣿⣿⣿⣿⣿⣿
+    ⣿⣿⣿⣿⣿⣷⣶⣶⣤⣤⣤⣤⣤⣤⣤⣤⣴⣶⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿
+    ⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿
+    */
+
+    /* Dithering (dither: true):
+    ⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⢯⣫⢯⢾⢽⢵⡻⣻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿
+    ⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⣯⡳⡯⣞⡽⡽⡽⡵⣯⣳⢽⣿⣿⣿⣿⣿⣿⣿⣿⣿
+    ⣿⣿⣿⣿⣿⣿⣿⣿⡿⣫⣞⡽⣝⡮⡯⣯⣫⢯⣞⢮⢷⡹⣿⣿⣿⣿⣿⣿⣿⣿
+    ⣿⣿⣿⣿⣿⣿⣿⡿⡽⡵⣳⢽⡳⡽⣽⡺⡮⡷⡽⡽⡽⣝⣞⢿⣿⣿⣿⣿⣿⣿
+    ⣿⣿⣿⣿⣿⣿⣿⣫⢯⢯⣳⢯⢯⣻⣺⡺⡽⡽⣝⡽⣺⢵⣫⢞⣿⣿⣿⣿⣿⣿
+    ⣿⣿⣿⣿⣿⣿⣳⣳⣫⢗⣯⡳⡯⣞⡮⡯⡯⣯⣺⢽⣺⢽⣺⣝⡮⢿⣿⣿⣿⣿
+    ⣿⣿⣿⣿⣿⣗⣗⣗⡽⣝⡮⡯⣻⢮⢯⣫⢯⢞⡮⡷⣝⣗⣗⣗⡽⣝⢿⣿⣿⣿
+    ⣿⣿⣿⣿⣿⢕⢕⢕⢝⢕⢝⢍⢇⢏⢝⢬⢭⠱⡍⡎⡎⡦⡱⡔⣜⢔⡕⡭⣻⣿
+    ⣿⣿⡿⡹⡢⡣⣣⢣⢳⣵⣿⣿⡿⠟⠞⠞⢾⣮⡎⡇⢏⢎⢎⣎⣎⡦⡧⣧⣲⣹
+    ⣿⡿⡱⡱⡕⣝⢜⡜⣕⢭⢛⡻⢅⠈⡁⠠⠄⡿⢯⣿⣿⣿⣿⡿⠋⠐⠄⡀⢿⢯
+    ⣿⢇⢗⢕⡝⣜⢜⢼⢸⢜⢜⢜⢕⢕⢪⢪⠪⡪⡪⣪⢪⢫⢫⢣⢤⢰⢰⢰⣱⣿
+    ⣿⢱⢕⢇⢧⢣⢳⡱⡣⡳⡱⡕⡕⡕⡕⡕⡕⡕⡝⡸⡨⢕⠕⠕⢅⢇⢕⢥⣹⣿
+    ⣿⢸⢜⢎⢎⢧⢣⢇⢏⢮⢪⠸⡨⢌⢌⢌⢈⢄⢡⠠⢄⡢⡢⡱⣵⣶⣿⣿⣿⣿
+    ⣿⡮⡪⢎⢧⢳⢱⢣⢳⢱⢣⢫⢪⢪⢢⢣⢣⢣⢣⢫⢕⢪⣺⣾⣿⣿⣿⣿⣿⣿
+    ⢯⡻⡮⣮⣪⢪⢪⢕⢭⢪⢣⢫⢪⢕⢭⢪⢕⢕⢕⣕⡵⣻⣺⣺⣻⣿⣿⣿⣿⣿
+    ⡯⣯⣻⣺⣺⣳⣳⢵⢵⢵⣹⣜⢵⢵⢵⢵⢵⡳⣯⣺⢽⢵⣳⣳⣳⣻⣿⣿⣿⣿
+    ⡯⣞⣞⣞⣞⣞⢾⢽⢽⢽⣺⣺⢽⢽⢽⢽⢽⢽⣺⣺⢽⢽⣺⣺⣺⣺⣿⣿⣿⣿
+    */
+
+    /* Inverted with dithering (invert: true):
+    ⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⡐⠔⡐⡁⡂⡊⢄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄
+    ⠄⠄⠄⠄⠄⠄⠄⠄⠄⢀⠐⢌⢐⠡⢂⢂⢂⢊⠐⠌⡂⠄⠄⠄⠄⠄⠄⠄⠄⠄
+    ⠄⠄⠄⠄⠄⠄⠄⠄⢀⠔⠡⢂⠢⢑⢐⠐⠔⡐⠡⡑⡈⢆⠄⠄⠄⠄⠄⠄⠄⠄
+    ⠄⠄⠄⠄⠄⠄⠄⢀⢂⢊⠌⡂⢌⢂⠂⢅⢑⢈⢂⢂⢂⠢⠡⡀⠄⠄⠄⠄⠄⠄
+    ⠄⠄⠄⠄⠄⠄⠄⠔⡐⡐⠌⡐⡐⠄⠅⢅⢂⢂⠢⢂⠅⡊⠔⡡⠄⠄⠄⠄⠄⠄
+    ⠄⠄⠄⠄⠄⠄⠌⠌⠔⡨⠐⢌⢐⠡⢑⢐⢐⠐⠅⡂⠅⡂⠅⠢⢑⡀⠄⠄⠄⠄
+    ⠄⠄⠄⠄⠄⠨⠨⠨⢂⠢⢑⢐⠄⡑⡐⠔⡐⡡⢑⢈⠢⠨⠨⠨⢂⠢⡀⠄⠄⠄
+    ⠄⠄⠄⠄⠄⡪⡪⡪⡢⡪⡢⡲⡸⡰⡢⡓⡒⣎⢲⢱⢱⢙⢎⢫⠣⡫⢪⢒⠄⠄
+    ⠄⠄⢀⢆⢝⢜⠜⡜⡌⠊⠄⠄⢀⣠⣡⣡⡁⠑⢱⢸⡰⡱⡱⠱⠱⢙⢘⠘⠍⠆
+    ⠄⢀⢎⢎⢪⠢⡣⢣⠪⡒⡤⢄⡺⣷⢾⣟⣿⢀⡐⠄⠄⠄⠄⢀⣴⣯⣿⢿⡀⡐
+    ⠄⡸⡨⡪⢢⠣⡣⡃⡇⡣⡣⡣⡪⡪⡕⡕⣕⢕⢕⠕⡕⡔⡔⡜⡛⡏⡏⡏⠎⠄
+    ⠄⡎⡪⡸⡘⡜⡌⢎⢜⢌⢎⢪⢪⢪⢪⢪⢪⢪⢢⢇⢗⡪⣪⣪⡺⡸⡪⡚⠆⠄
+    ⠄⡇⡣⡱⡱⡘⡜⡸⡰⡑⡕⣇⢗⡳⡳⡳⡷⡻⡞⣟⡻⢝⢝⢎⠊⠉⠄⠄⠄⠄
+    ⠄⢑⢕⡱⡘⡌⡎⡜⡌⡎⡜⡔⡕⡕⡝⡜⡜⡜⡜⡔⡪⡕⠅⠁⠄⠄⠄⠄⠄⠄
+    ⡐⢄⢑⠑⠕⡕⡕⡪⡒⡕⡜⡔⡕⡪⡒⡕⡪⡪⡪⠪⢊⠄⠅⠅⠄⠄⠄⠄⠄⠄
+    ⢐⠐⠄⠅⠅⠌⠌⡊⡊⡊⠆⠣⡊⡊⡊⡊⡊⢌⠐⠅⡂⡊⠌⠌⠌⠄⠄⠄⠄⠄
+    ⢐⠡⠡⠡⠡⠡⡁⡂⡂⡂⠅⠅⡂⡂⡂⡂⡂⡂⠅⠅⡂⡂⠅⠅⠅⠅⠄⠄⠄⠄
+    */
+})();
 ```
+
+See the examples folder provided in the repo for more information.
+
+<br>
+<hr>
 <br>
 
-# TODO:
-
-* Promisify callback functions
-* Add dithering support
-* Inversion (dark mode) support
-<br>
-<br>
-<br>
 <i>Originally masterminded by the creator of https://505e06b2.github.io/Image-to-Braille, this utility has been refactored and converted into a node.js package.</i>

@@ -1,27 +1,25 @@
 {
-  "name": "img2braille",
-  "version": "0.1.0",
-  "description": "Converts an Image to Brialle (Unicode) Art",
-  "main": "app.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/5E7EN/Img2Brialle.git"
-  },
-  "keywords": [
-    "braille",
-    "image-conversion",
-    "js"
-  ],
-  "author": "5E7EN",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/5E7EN/Img2Brialle/issues"
-  },
-  "homepage": "https://github.com/5E7EN/Img2Brialle#readme",
-  "dependencies": {
-    "canvas": "^2.6.1"
-  }
+    "name": "img2braille",
+    "version": "1.0.0",
+    "description": "Dynamically converts an image to braille (ASCII) art",
+    "main": "app.js",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/5E7EN/Img2Braille.git"
+    },
+    "keywords": [
+        "ascii",
+        "braille",
+        "art",
+        "image-conversion"
+    ],
+    "author": "5E7EN",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/5E7EN/Img2Braille/issues"
+    },
+    "homepage": "https://github.com/5E7EN/Img2Braille#readme",
+    "dependencies": {
+        "canvas": "^2.6.1"
+    }
 }
