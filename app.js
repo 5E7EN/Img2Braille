@@ -2,15 +2,15 @@ const { Image, createCanvas } = require('canvas');
 const { applyDithering } = require('./util/dithering');
 
 function getChar(current) {
-    allzeros = true;
+    let allZeros = true;
     for (i = 0; i < current.length; i++) {
         if (current[i] != 0) {
-            allzeros = false;
+            allZeros = false;
             break;
         }
     }
 
-    if (!allzeros) {
+    if (!allZeros) {
         total_val = (current[0] << 0) + (current[1] << 1) + (current[2] << 2) + (current[4] << 3) + (current[5] << 4) + (current[6] << 5) + (current[3] << 6) + (current[7] << 7);
     } else {
         total_val = 4;
@@ -70,7 +70,7 @@ function braillefy(imageURL = '', asciiWidth = 30, options = {}) {
                     }
                     ascii += getChar(current);
                 }
-                ascii += options.lineSeperator || '\n';
+                ascii += options.lineSeparator || '\n';
             }
 
             return resolve(ascii);
