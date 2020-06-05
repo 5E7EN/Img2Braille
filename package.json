@@ -1,6 +1,6 @@
 {
     "name": "img2braille",
-    "version": "2.0.0",
+    "version": "1.0.0",
     "description": "Dynamically converts an image to braille (ASCII) art",
     "main": "app.js",
     "repository": {
