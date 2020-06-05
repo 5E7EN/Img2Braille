@@ -20,8 +20,8 @@ After importing the package into your project, a `braillefy` method will be acce
 -   `imageURL` (string) - The source URL of the target image. This can be represented as either a local or remote path.
 -   `asciiWidth` (integer) - The desired width of the generated ASCII.
 -   `options` - An object with following (all optional):
-    -   `dither` (boolean) - If truthy, a dithering effect will be applied to the output which will produce an overall cleaner/smoother result. Default: true.
-    -   `invert` (boolean) - If truthy, the background colors will be inverted (light -> dark). This is especially useful in cases where you'd like to match a certain background color scheme. Default: false.
+    -   `dither` (boolean) - If truthy, a dithering effect will be applied to the output which will produce an overall cleaner/smoother result.
+    -   `invert` (boolean) - If truthy, the background colors will be inverted (light -> dark). This is especially useful in cases where you'd like to match a certain background color scheme.
     -   `lineSeperator` (string) - Character of which to succeed each end-of-line. Default: `\n` (newline).
     -   `colors` - An object representing RGB threshold levels to be applied during generation. Minimum: 0.01 - Maximum: 10. Default: `{ red: 1, green: 1, blue: 1 }`.
 
